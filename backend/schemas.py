@@ -20,7 +20,7 @@ class Category(CategoryBase):
 class TaskBase(BaseModel):
     title: str
     description: Optional[str] = None
-    status: Optional[str] = "pending"
+    status: Optional[str] = "pendente"
     priority: Optional[int] = 0
     due_date: Optional[datetime] = None
     category_id: Optional[uuid.UUID] = None
