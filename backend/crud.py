@@ -3,30 +3,10 @@ from fastapi import HTTPException
 import models, schemas
 
 # -----------------
-# Categories
-# -----------------
-def create_category(db: Session, category: schemas.CategoryCreate):
-    db_category = models.Category(**category.dict())
-    db.add(db_category)
-    db.commit()
-    db.refresh(db_category)
-    return db_category
-
-def get_categories(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(models.Category).offset(skip).limit(limit).all()
-
-def delete_category(db: Session, category_id: str):
-    category = db.query(models.Category).filter(models.Category.id == category_id).first()
-    if category:
-        db.delete(category)
-        db.commit()
-
-
-# -----------------
 # Tasks
 # -----------------
 def create_task(db: Session, task: schemas.TaskCreate):
-    db_task = models.Task(**task.dict())
+    db_task = models.Task(**task.dict(exclude_unset=True))
     db.add(db_task)
     db.commit()
     db.refresh(db_task)
@@ -35,7 +15,11 @@ def create_task(db: Session, task: schemas.TaskCreate):
 def get_tasks(db: Session, skip: int = 0, limit: int = 10):
     return db.query(models.Task).offset(skip).limit(limit).all()
 
-def update_task(db: Session, task_id: str, task: schemas.TaskCreate):
+def get_task(db: Session, task_id: str):
+    return db.query(models.Task).filter(models.Task.id == task_id).first()
+
+
+def update_task(db: Session, task_id: str, task: schemas.TaskUpdate):
     db_task = db.query(models.Task).filter(models.Task.id == task_id).first()
     if not db_task:
         raise HTTPException(status_code=404, detail="Task not found")
@@ -50,5 +34,10 @@ def update_task(db: Session, task_id: str, task: schemas.TaskCreate):
     return db_task
 
 def delete_task(db: Session, task_id: str):
-    db.query(models.Task).filter(models.Task.id == task_id).delete()
+    db_task = db.query(models.Task).filter(models.Task.id == task_id).first()
+    if not db_task:
+        raise HTTPException(status_code=404, detail="Task not found")
+
+    db.delete(db_task)
     db.commit()
+    return {"detail": "Task deleted successfully", "id": str(task_id)}
