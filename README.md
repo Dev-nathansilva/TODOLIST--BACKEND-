@@ -47,7 +47,6 @@ uvicorn main:app --reload
 ```
 
 A API estará disponível em [http://127.0.0.1:8000](http://127.0.0.1:8000).
-A documentação interativa Swagger UI estará em [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs).
 
 ---
 
@@ -225,16 +224,6 @@ DELETE /tasks/{id}
     |    (Neon)      |
     +----------------+
 ```
-
----
-
-## 🧪 Testes
-
-* **Swagger UI:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-* **ReDoc:** [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
-* Pode ser testado com **Postman** ou **cURL** usando os exemplos acima.
-
----
 
 ## 📄 Licença
 
